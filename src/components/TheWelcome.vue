@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import DocumentationIcon from './icons/IconDocumentation.vue'
+import { defineComponent } from 'vue'
+
 </script>
 
 <template>
@@ -10,6 +12,6 @@ import DocumentationIcon from './icons/IconDocumentation.vue'
 
     음원분리 바로가기
     <br />
-    <a href="http://localhost:5174/" target="_blank" rel="noopener">SingGo</a>
+    <router-link to="/separate">SingGo</router-link>
   </WelcomeItem>
 </template>
