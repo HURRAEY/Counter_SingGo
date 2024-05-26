@@ -1,77 +1,91 @@
 <template>
-    <v-col align-self="center" justify="start" offset="1">
-        <h2>음원 분리</h2>
-
-        <fromLink v-if="separate_type === 'link'" @set-audio-link="setAudioUrl" />
-        <searchLink v-if="separate_type === 'search'" @set-youtube-search="setAudioUrl" />
-        <v-row v-if="!is_progress && !is_streaming">
-            <v-col>
-                <v-switch v-model="is_sample_mode" :label="`샘플모드: ${is_sample_mode ? '활성화' : '비활성화'}`" color="info" hide-details />
-            </v-col>
-        </v-row>
-        <v-row>
-            <v-col align-self="center">
-                <v-btn prepend-icon="mdi-pencil" block :loading="is_progress" @click="startSeparate" :disabled="!is_enable_separate">
-                    <template v-slot:prepend>
-                        <v-icon color="success"></v-icon>
-                    </template>
-
-                    음원분리
-
-                    <template v-slot:loader>
-                        <v-progress-circular indeterminate color="success" />
-                    </template>
-                </v-btn>
-            </v-col>
-        </v-row>
-        <!-- <v-row v-if="streaming_waiting < 101 && is_progress">-->
-        <!--     <v-col align-self="center">-->
-        <!--         진행중...-->
-        <!--         <v-progress-linear v-model="streaming_waiting" height="10" color="red-lighten-2" striped></v-progress-linear>-->
-        <!--     </v-col>-->
-        <!-- </v-row>-->
-        <!-- <v-row v-if="is_streaming && streaming_waiting > 100">-->
-        <!--     <v-col>-->
-        <!--         <v-switch v-model="is_lyrics_input_mode" :label="`가사입력: ${is_lyrics_input_mode ? '활성화' : '비활성화'}`" color="info" hide-details />-->
-        <!--     </v-col>-->
-        <!-- </v-row>-->
-        <!-- <v-row v-show="is_streaming && streaming_waiting > 100 && is_lyrics_input_mode">-->
-        <!--     <v-col>-->
-        <!--         <v-textarea label="가사 입력" auto-grow v-model="user_input_lyrics"></v-textarea>-->
-        <!--     </v-col>-->
-        <!-- </v-row>-->
-        <v-row v-show="is_streaming && streaming_waiting > 100">
-            <v-col cols="6" align-self="center">
-                <audio ref="streamAudio" controls @play="checkPlayAudio" @pause="pauseAudio"></audio>
-            </v-col>
-        </v-row>
-        <v-row v-if="download_file_url && !is_progress">
-            <v-col>
-                <v-btn block @click="downloadBlob"> 다운로드</v-btn>
-            </v-col>
-        </v-row>
-        <!--  <v-row>-->
-        <!--      <v-col>-->
-        <!--          <lyrics-item v-for="(item, index) in audio_lyrics_model.text_list" :key="`${index}_lyrics`" :lyrics_item="item"></lyrics-item>-->
-        <!--      </v-col>-->
-        <!--  </v-row>-->
-        <v-row v-if="is_enable_audio_info">
-            <v-col>
-                <v-alert :text="info_message" />
-            </v-col>
-        </v-row>
-        <v-row v-if="is_enable_audio_alert">
-            <v-col>
-                <v-alert :text="error_message" />
-            </v-col>
-        </v-row>
-    </v-col>
-</template>
-
-<script lang="ts">
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-    components: {},
-});
-</script>
+    <div class="bg-gray-100 flex flex-col items-center p-6">
+      <header class="text-center mb-8">
+        <img src="https://via.placeholder.com/100x50" alt="Logo" class="header-logo mx-auto">
+        <h1 class="text-4xl font-bold mt-4">음색 합성</h1>
+        <p class="text-lg mt-2">Creative Audio Solutions</p>
+      </header>
+      <main class="w-full max-w-md mx-auto bg-white p-6 rounded-lg shadow-md">
+        <p class="text-center text-xl font-bold mb-6">AnAI의 기술을 사용해 사용자의 음원에 음색을 더해줍니다.</p>
+        <form @submit.prevent="submitForm">
+          <div class="mb-4">
+            <label for="model" class="block mb-2">음색 모델을 골라주세요.</label>
+            <select id="model" v-model="selectedModel" class="input-box">
+              <option value="PTH">PTH Model</option>
+              <!-- Add more options as needed -->
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="algorithm" class="block mb-2">알고리즘을 골라주세요.</label>
+            <select id="algorithm" v-model="selectedAlgorithm" class="input-box">
+              <option value="Algorithm1">Algorithm 1</option>
+              <!-- Add more options as needed -->
+            </select>
+          </div>
+          <div class="mb-4">
+            <label for="file" class="block mb-2">음원파일을 선택하세요.</label>
+            <input type="file" id="file" @change="handleFileUpload" class="upload-box" aria-label="파일을 업로드해주세요.">
+          </div>
+          <div class="text-center">
+            <button type="submit" class="btn">음색 합성 시작</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </template>
+  
+  <script>
+  export default {
+    data() {
+      return {
+        selectedModel: 'PTH',
+        selectedAlgorithm: 'Algorithm1',
+        selectedFile: null
+      };
+    },
+    methods: {
+      handleFileUpload(event) {
+        this.selectedFile = event.target.files[0];
+      },
+      submitForm() {
+        // Handle form submission logic here
+        console.log('Selected Model:', this.selectedModel);
+        console.log('Selected Algorithm:', this.selectedAlgorithm);
+        console.log('Selected File:', this.selectedFile);
+  
+        // Add the necessary logic to process the form data
+      }
+    }
+  };
+  </script>
+  
+  <style scoped>
+  body {
+    font-family: 'Nanum Gothic', sans-serif;
+  }
+  .header-logo {
+    width: 100px;
+  }
+  .input-box {
+    border: 2px solid #000;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: bold;
+  }
+  .upload-box {
+    border: 2px solid #000;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .btn {
+    background-color: #000;
+    color: #fff;
+    padding: 10px 20px;
+    text-align: center;
+    display: inline-block;
+    cursor: pointer;
+  }
+  </style>
+  
